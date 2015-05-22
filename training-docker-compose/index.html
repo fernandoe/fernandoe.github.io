@@ -1,0 +1,19 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>docker-compose</title><meta name="generator" content="Hovercraft! 1.0 http://regebro.github.com/hovercraft"></meta><meta name="author" content="Fernando Esp&#xED;ndola"></meta><meta name="description" content="docker-compose"></meta><link rel="stylesheet" href="css/hovercraft.css" media="all"></link><link rel="stylesheet" href="css/impressConsole.css" media="all"></link><link rel="stylesheet" href="css/highlight.css" media="all"></link><link rel="stylesheet" href="stylesheet.css" media="screen,projection"></link></head><body class="impress-not-supported"><div id="impress"><div class="step" step="0" data-x="0" data-y="0"><img src="images/docker-logo.png" alt="" width="" height="600px"></img><p>Docker Compose</p></div><div class="step" step="1" data-x="1600" data-y="0"><pre class="highlight code yaml"><span class="l-Scalar-Plain">mysql</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:5.6.24</span>
+<span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_DATABASE=exemplo</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=password</span>
+
+<span class="l-Scalar-Plain">app</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+<span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mysql</span></pre></div><div class="step" step="2" data-x="3200" data-y="0"><ul><li>Compose is a tool for defining and running complex applications with Docker</li></ul></div><div class="step" step="3" data-x="4800" data-y="0"><ul><li>define your containers in simples yaml file.</li><li>Compose container together.</li><li>Manage group of containers with single tool.</li></ul></div><div class="step" step="4" data-x="6400" data-y="0"><pre class="highlight code yaml"><span class="l-Scalar-Plain">mysql</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:5.6.24</span>
+<span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_DATABASE=exemplo</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=password</span></pre></div><div class="step" step="5" data-x="8000" data-y="0"><pre class="highlight code yaml"><span class="l-Scalar-Plain">app</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+<span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mysql</span></pre></div><div class="step" step="6" data-x="9600" data-y="0"><pre class="highlight code shell"><span class="nv">$ </span>docker-compose build
+<span class="nv">$ </span>docker-compose up
+<span class="nv">$ </span>docker-compose ps</pre></div></div><div id="hovercraft-help"><table><tr><th>Space</th><td>Forward</td></tr><tr><th>Left, Down, Page Down</th><td>Next slide</td></tr><tr><th>Right, Up, Page Up</th><td>Previous slide</td></tr><tr><th>P</th><td>Open presenter console</td></tr><tr><th>H</th><td>Toggle this help</td></tr></table></div><script type="text/javascript" src="js/impress.js"></script><script type="text/javascript" src="js/impressConsole.js"></script><script type="text/javascript" src="js/hovercraft.js"></script></body></html>
