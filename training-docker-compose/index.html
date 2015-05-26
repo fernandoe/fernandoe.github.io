@@ -1,19 +1,46 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>docker-compose</title><meta name="generator" content="Hovercraft! 1.0 http://regebro.github.com/hovercraft"></meta><meta name="author" content="Fernando Esp&#xED;ndola"></meta><meta name="description" content="docker-compose"></meta><link rel="stylesheet" href="css/hovercraft.css" media="all"></link><link rel="stylesheet" href="css/impressConsole.css" media="all"></link><link rel="stylesheet" href="css/highlight.css" media="all"></link><link rel="stylesheet" href="stylesheet.css" media="screen,projection"></link></head><body class="impress-not-supported"><div id="impress"><div class="step" step="0" data-x="0" data-y="0"><img src="images/docker-logo.png" alt="" width="" height="600px"></img><p>Docker Compose</p></div><div class="step" step="1" data-x="1600" data-y="0"><pre class="highlight code yaml"><span class="l-Scalar-Plain">mysql</span><span class="p-Indicator">:</span>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>docker-compose</title><meta name="generator" content="Hovercraft! 1.0 http://regebro.github.com/hovercraft"></meta><meta name="author" content="Fernando Esp&#xED;ndola"></meta><meta name="description" content="docker-compose"></meta><link rel="stylesheet" href="css/hovercraft.css" media="all"></link><link rel="stylesheet" href="css/impressConsole.css" media="all"></link><link rel="stylesheet" href="css/highlight.css" media="all"></link><link rel="stylesheet" href="stylesheet.css" media="screen,projection"></link></head><body class="impress-not-supported"><div id="impress"><div class="step" step="0" data-x="0" data-y="0"><h1 id="docker-compose">Docker Compose</h1><img src="images/docker-logo.png" alt="" width="" height="600px"></img></div><div class="step" step="1" data-x="1600" data-y="0"><h1 id="id1">Docker Compose</h1><ul><li>Compose is a tool for defining and running complex applications with Docker.</li><li>define your containers in simples YAML file.</li><li>Originated from Fig</li></ul></div><div class="step" step="2" data-x="3200" data-y="0"><h1 id="example">Example</h1><blockquote><ul><li>Application ABC</li><li>Dependencies<blockquote><ul><li>MySQL</li><li>Redis</li><li>MongoDB</li></ul></blockquote></li></ul></blockquote></div><div class="step" step="3" data-x="4800" data-y="0"><h1 id="docker-hub-registry">Docker Hub Registry</h1><img src="images/docker-hub-registry.png" alt="" width="" height="600px"></img><p><a href="https://registry.hub.docker.com/">https://registry.hub.docker.com/</a></p></div><div class="step" step="4" data-x="6300" data-y="0" data-scale="1"></div><div class="step" step="5" data-x="6300" data-y="-200" data-scale=".5" id="docker-compose"><h1 id="docker-compose-yml">docker-compose.yml</h1><pre class="highlight code yaml"><span class="l-Scalar-Plain">mysql</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:5.6.24</span>
-<span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_DATABASE=exemplo</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=password</span>
+  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">~/.docker/boletos/mysql:/var/lib/mysql</span>
+  <span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_DATABASE=boletos</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=password</span></pre></div><div class="step" step="6" data-x="6300" data-y="-90" data-scale=".5"><pre class="highlight code yaml"><span class="l-Scalar-Plain">mongo</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mongo:3.0.2</span>
+  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">~/.docker/boletos/mongo:/data/db</span></pre></div><div class="step" step="7" data-y="-20" data-x="6300" data-scale=".5"><pre class="highlight code yaml"><span class="l-Scalar-Plain">redis</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redis:2.8.19</span>
+  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">~/.docker/boletos/redis:/data</span></pre></div><div class="step" step="8" data-y="60" data-x="6300" data-scale=".5"><pre class="highlight code yaml"><span class="l-Scalar-Plain">boletos</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">uwsgi --ini uwsgi.ini</span>
+  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mysql</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">redis</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mongo</span></pre></div><div class="step" step="9" data-y="160" data-x="6300" data-scale=".5"><pre class="highlight code yaml"><span class="l-Scalar-Plain">celery</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">celery -A boletos worker -l info -B</span>
+  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mysql</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">redis</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mongo</span></pre></div><div class="step" step="10" data-scale="1" data-x="7800" data-y="-40"><h1 id="dockerfile">Dockerfile</h1><pre class="highlight code docker"><span class="k">FROM</span><span class="s"> ubuntu:14.04.2</span>
+<span class="k">MAINTAINER</span><span class="s">  fer.esp@gmail.com</span>
 
-<span class="l-Scalar-Plain">app</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
-<span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mysql</span></pre></div><div class="step" step="2" data-x="3200" data-y="0"><ul><li>Compose is a tool for defining and running complex applications with Docker</li></ul></div><div class="step" step="3" data-x="4800" data-y="0"><ul><li>define your containers in simples yaml file.</li><li>Compose container together.</li><li>Manage group of containers with single tool.</li></ul></div><div class="step" step="4" data-x="6400" data-y="0"><pre class="highlight code yaml"><span class="l-Scalar-Plain">mysql</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:5.6.24</span>
-<span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_DATABASE=exemplo</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=password</span></pre></div><div class="step" step="5" data-x="8000" data-y="0"><pre class="highlight code yaml"><span class="l-Scalar-Plain">app</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
-<span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mysql</span></pre></div><div class="step" step="6" data-x="9600" data-y="0"><pre class="highlight code shell"><span class="nv">$ </span>docker-compose build
-<span class="nv">$ </span>docker-compose up
-<span class="nv">$ </span>docker-compose ps</pre></div></div><div id="hovercraft-help"><table><tr><th>Space</th><td>Forward</td></tr><tr><th>Left, Down, Page Down</th><td>Next slide</td></tr><tr><th>Right, Up, Page Up</th><td>Previous slide</td></tr><tr><th>P</th><td>Open presenter console</td></tr><tr><th>H</th><td>Toggle this help</td></tr></table></div><script type="text/javascript" src="js/impress.js"></script><script type="text/javascript" src="js/impressConsole.js"></script><script type="text/javascript" src="js/hovercraft.js"></script></body></html>
+<span class="k">RUN</span> apt-get update
+
+<span class="k">RUN</span> apt-get -y install build-essential
+<span class="k">RUN</span> apt-get -y install make
+<span class="k">RUN</span> apt-get -y install gcc
+<span class="k">RUN</span> apt-get -y install git
+<span class="k">RUN</span> apt-get -y install libmysqlclient-dev
+<span class="k">RUN</span> apt-get -y install python
+<span class="k">RUN</span> apt-get -y install python-dev
+<span class="k">RUN</span> apt-get -y install python-pip
+<span class="k">RUN</span> apt-get -y install python-setuptools
+<span class="k">RUN</span> apt-get -y install python-virtualenv
+<span class="k">RUN</span> apt-get -y install vim
+
+<span class="k">RUN</span> apt-get -y autoremove
+<span class="k">RUN</span> apt-get -y autoclean
+<span class="k">RUN</span> apt-get -y clean
+
+<span class="k">WORKDIR</span><span class="s"> /app</span></pre></div><div class="step" step="11" data-y="-40" data-x="9300" data-scale="1"><h1 id="putting-it-all-together">Putting It All Together</h1><h2 id="build">Build</h2><pre class="highlight code shell"><span class="nv">$ </span>docker-compose build</pre><h2 id="running">Running</h2><pre class="highlight code shell"><span class="nv">$ </span>docker-compose up</pre></div><div class="step" step="12" id="questions" data-x="10800" data-y="-40" data-scale="1"><h1 id="questions">Questions?</h1><img src="images/img-04.jpg" alt="" width="400px" height=""></img><h2 id="thank-you-fernando-espindola">Thank you! Fernando Esp&#xED;ndola</h2><table cellpadding="0" cellspacing="0"><tbody><tr><td><img src="images/gmail-logo.jpg" alt="" width="" height="20px"></img></td><td><p><a href="mailto:fer.esp@gmail.com">fer.esp@gmail.com</a></p></td></tr><tr><td><img src="images/twitter-logo.jpg" alt="" width="" height="35px"></img></td><td><p><a href="https://twitter.com/feresp">@feresp</a></p></td></tr></tbody></table></div></div><div id="hovercraft-help"><table><tr><th>Space</th><td>Forward</td></tr><tr><th>Left, Down, Page Down</th><td>Next slide</td></tr><tr><th>Right, Up, Page Up</th><td>Previous slide</td></tr><tr><th>P</th><td>Open presenter console</td></tr><tr><th>H</th><td>Toggle this help</td></tr></table></div><script type="text/javascript" src="js/impress.js"></script><script type="text/javascript" src="js/impressConsole.js"></script><script type="text/javascript" src="js/hovercraft.js"></script></body></html>
